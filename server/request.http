@@ -1,0 +1,30 @@
+POST http://localhost:5000/api/auth/register
+Content-Type: application/json
+
+{
+    "username": "sam12345678",
+    "password": "1234"
+}
+
+###
+
+POST http://localhost:5000/api/auth/login
+Content-Type: application/json
+
+{
+    "username": "sam12345678",
+    "password": "1234"
+}
+
+###
+POST http://localhost:5000/api/posts
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MjAyOGRiYTQ1YmJhNzlhODY4M2RhYTIiLCJpYXQiOjE2NDQzOTQ4MzF9.0p8EBHzoYhpBkfe1ETI0z1bFHAN5uZAVJwX1yjbemoo
+
+{
+    "description": "hahaha"
+}
+###
+GET http://localhost:5000/api/posts
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MjAyOGRiYTQ1YmJhNzlhODY4M2RhYTIiLCJpYXQiOjE2NDQzOTQ4MzF9.0p8EBHzoYhpBkfe1ETI0z1bFHAN5uZAVJwX1yjbemoo
