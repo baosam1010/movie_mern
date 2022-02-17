@@ -1,0 +1,31 @@
+html {
+    scroll-behavior: smooth;
+};
+body {
+    font-family: $primary-font;
+    font-size: 16px;
+    line-height: 1;
+    color: $gray-light;
+    margin: 0 auto;
+    
+};
+a{
+    text-emphasis: none;
+
+}
+button{
+    cursor: pointer;
+}
+
+input,
+button,
+textarea,
+select {
+    font-family: $primary-font;
+    font-size: 14px;
+    outline: none;
+    border: 0;
+};
+input {
+    line-height: normal;
+};

@@ -1,0 +1,111 @@
+@mixin afterhover {
+    &:hover {
+        opacity: 0.6;
+        position: relative;
+        &::after {
+            content: "";
+            display: block;
+            width: 100%;
+            position: absolute;
+            margin-top: 10px;
+            border: 1px solid white;
+            transition: width 5s;
+            animation-name: centertoside;
+            animation-duration: 1s;
+            @keyframes centertoside {
+                0% {
+                    width: 50%;
+                }
+                100% {
+                    width: 100%;
+                }
+            }
+        }
+    }
+}
+
+.header {
+    color: white;
+    background-image: linear-gradient(to bottom right, rgb(137, 64, 233), rgb(194, 64, 233));
+
+
+    &_top {
+        display: flex;
+        width: 100%;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px 0;
+
+        &_logo {
+            a {
+                color: white;
+                text-decoration: none;
+                font-size: 16px;
+                cursor: pointer;
+                @include afterhover;
+            }
+        }
+        &_search {
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            &-input {
+                padding: 8px 0 8px 16px;
+                width: 360px;
+                border-radius: 12px;
+                font-size: 16px;
+            }
+            &-btn {
+                border-top-right-radius: 12px;
+                border-bottom-right-radius: 12px;
+                position: absolute;
+                right: 0;
+                line-height: 38px;
+                cursor: pointer;
+                background-color: $gray-light;
+                color: $white;
+                font-weight: 500;
+                &:hover {
+                    background-color: rgba(167, 172, 180, 0.6);
+                    color: $gray-dark;
+                }
+            }
+        }
+        &_auth {
+            &-link {
+                color: $white;
+                text-decoration: none;
+                &:hover {
+                    opacity: 0.6;
+                }
+            }
+            span {
+                margin: 0 8px;
+            }
+        }
+    }
+    &_bottom {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding-bottom: 20px;
+        .category {
+            display: flex;
+
+            &_item {
+                display: block;
+                margin-left: 30px;
+                text-decoration: none;
+                color: $white;
+                font-size: 20px;
+                font-weight: 500;
+                &:first-child {
+                    margin-left: 0;
+                }
+                @include afterhover;
+            }
+        }
+    }
+}
