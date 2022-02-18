@@ -8,6 +8,39 @@ h1, h2, h3, h4, h5, h6 {
   margin: 0;
 }
 
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+img, picture, video, canvas, svg {
+  display: block;
+  max-width: 100%;
+}
+
+input, button, textarea, select {
+  font: inherit;
+  outline: none;
+  border: none;
+}
+
+p, h1, h2, h3, h4, h5, h6 {
+  overflow-wrap: break-word;
+}
+
 html {
   scroll-behavior: smooth;
 }
@@ -803,5 +836,206 @@ input {
 
 .footer_infor-item:hover {
   text-decoration: underline;
+}
+
+.login {
+  background-color: gray;
+  text-align: center;
+  background-color: #743ad5;
+}
+
+.login_title {
+  color: #ffffff;
+  margin-bottom: 10px;
+}
+
+.login_input {
+  margin: 4px 0;
+  padding: 10px;
+  outline: none;
+  border: 4px solid white;
+  border-width: 4px;
+  border-radius: 8px;
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.login_input:focus {
+  border-color: greenyellow;
+}
+
+.login_form {
+  display: flex;
+  flex-direction: column;
+  max-width: 450px;
+}
+
+.login_wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.login_wrapper .btn_login {
+  color: white;
+  background-image: linear-gradient(to bottom right, #8940e9, #c240e9);
+}
+
+.login_wrapper .btn_cancel {
+  text-decoration: none;
+  color: white;
+}
+
+.login_btn {
+  margin-top: 10px;
+  padding: 8px 16px;
+  font-weight: 600;
+  background: none;
+  border-radius: 10px;
+  border: 4px solid #b3b1b1;
+}
+
+.login_desc {
+  margin: 20px 0;
+  color: white;
+}
+
+.login_desc a {
+  color: black;
+}
+
+.auth {
+  width: 100%;
+  height: 100%;
+  background-image: url("https://wallpaperaccess.com/full/1140269.jpg");
+  background-repeat: no-repeat;
+  object-fit: fill;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px 0;
+}
+
+.auth_wrapper {
+  border: 4px solid white;
+  border-radius: 10px;
+  padding: 10px;
+  background-color: #743ad5;
+}
+
+.main {
+  color: black;
+  background-color: #a7a7a7;
+}
+
+.slider {
+  padding: 40px 0;
+}
+
+.slider .slick-slider .slick-list {
+  margin-left: -8px;
+  margin-right: -8px;
+}
+
+.slider .slick-slider .slick-list .slick-slide {
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+.block {
+  display: block;
+}
+
+.block-title {
+  display: flex;
+  justify-content: space-between;
+  color: #ffffff;
+  margin-bottom: 20px;
+}
+
+.block-title h2 {
+  color: transparent;
+  background-clip: text;
+  -webkit-background-clip: text;
+  background-image: linear-gradient(to right, #8f2cff, #ff00ff);
+}
+
+.block-title a {
+  text-decoration: none;
+  color: black;
+  padding: 8px 8px;
+  border-radius: 4px;
+  background-color: #ffffff;
+}
+
+.block-title a:hover {
+  text-decoration: underline;
+}
+
+.block .list {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 10px;
+  list-style-type: none;
+  position: relative;
+  padding-left: 0;
+  padding-bottom: 20px;
+}
+
+.block .item {
+  position: relative;
+}
+
+.block .item img {
+  width: 100%;
+  object-fit: fill;
+  height: 190px;
+  border-radius: 10px;
+}
+
+.block .item span {
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 8px;
+  border-radius: 4px;
+  background-image: linear-gradient(to right, #8f2cff, #ff00ff);
+  color: #ffffff;
+  font-size: 12px;
+}
+
+.block .item span::after {
+  content: "";
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  background-image: linear-gradient(to right, #8f2cff, #ff00ff);
+  border-top: 10px solid #cb3be9;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, 120%);
+}
+
+.block .item p {
+  position: absolute;
+  width: 100%;
+  background-color: rgba(20, 17, 17, 0.8);
+  bottom: 0;
+  padding: 10px 0 10px 20px;
+  color: white;
+  border-bottom-right-radius: 10px;
+  border-bottom-left-radius: 10px;
+}
+
+.block .item:first-child {
+  grid-column-start: span 2;
+  grid-row-start: span 2;
+}
+
+.block .item:first-child img {
+  height: 390px;
 }
 /*# sourceMappingURL=app.css.map */

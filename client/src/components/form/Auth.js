@@ -15,7 +15,9 @@ function Auth(props) {
     )
     return (
         <div className="auth">
-            {body}
+            <div className="container auth_wrapper">
+                {body}
+            </div>
         </div>
     )
 }

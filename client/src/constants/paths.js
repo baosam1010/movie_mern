@@ -1,10 +1,10 @@
-import SubtanceMain from './../components/subtancemain/SubtanceMain';
 import Auth from '../components/form/Auth';
+import Main from '../components/main/Main';
 
 const  paths = [
     {
         path:"/",
-        element: SubtanceMain
+        element: Main
     },
     {
         path:"/login",

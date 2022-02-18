@@ -3,7 +3,8 @@ import Header from './../header/Header';
 import { Route, Routes } from 'react-router-dom';
 import { paths } from './../../constants/paths';
 import Footer from '../footer/Footer';
-
+import "slick-carousel/slick/slick.css"; 
+import "slick-carousel/slick/slick-theme.css";
 
 function App() {
   const showRouter = (paths) => {
@@ -17,11 +18,11 @@ function App() {
   return (
     <div className="app">
       <Header />
-      <div className="container">
+      {/* <div className="container"> */}
         <Routes>
           {showRouter(paths)}
         </Routes>
-      </div>
+      {/* </div> */}
       <Footer />
     </div>
   );
