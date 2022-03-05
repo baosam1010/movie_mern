@@ -1,12 +1,50 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import { connect, useDispatch } from 'react-redux';
+import React, { useRef } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import classnames from 'classname';
+import { LoadUser } from '../../actions/Actions';
 
-function HeaderTop() {
+
+function HeaderTop(props) {
+    const bar= useRef();
+    const negative = useNavigate();
+    const dispatch = useDispatch();
+    const { info } = props;
+    const { userAuthenticated, user } = info;
+
+    let name;
+    let level;
+    if (userAuthenticated && user !== null) {
+        const { username, role } = info.user;
+        name = username;
+        level = role;
+    }
+
+    const handleLogOut = () => {
+        dispatch(LoadUser(null));
+        negative('/')
+    };
+
+    const handleChange=()=>{  
+       bar.current.classList.toggle('d-block');
+    };
+
     return (
         <div className="header_top">
+            <div className="header_mobile">
+                <div className="header_nav"><i className="fas fa-bars" onClick={handleChange}></i></div>
+                <div className="header_nav_list d-none" ref={bar}>
+                    <Link className="category_item" to="/">Trang chủ</Link>
+                    <Link className="category_item" to="/list/phimbo">Phim Bộ</Link>
+                    <Link className="category_item" to="/list/phimle">Phim Lẻ</Link>
+                    <Link className="category_item" to="/list/phimhanhdong">Phim Hành Động</Link>
+                    <Link className="category_item" to="/list/phimtinhcam">Phim Tình Cảm</Link>
+                    <Link className="category_item" to="/list/phimvientuong">Phim Viễn Tưởng</Link>
+                </div>
+            </div>
             <div className="header_top_logo">
                 <Link to="/">
-                    <i className="fal fa-camera-movie"></i>
+                    <i className="fa-solid fa-video"></i>
                     <span>SamMovie</span>
                 </Link>
             </div>
@@ -15,12 +53,35 @@ function HeaderTop() {
                 <button type="button" className="header_top_search-btn">Search</button>
             </div>
             <div className="header_top_auth">
-                <Link className="header_top_auth-link" to="/login" >Login</Link>
-                <span>{"|"}</span>
-                <Link className="header_top_auth-link" to="/register" >Register</Link>
+                <div className={classnames(
+                    userAuthenticated ? "d-flex" : "d-none",
+                    "header_top_user"
+                )}>
+                    <div className="header_user-img">
+                        <img src="https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_960_720.png" alt="img avatar" />
+                    </div>
+                    <span>{name}</span>
+
+                    <div className="header_top_user_subnav">
+                        <div className="nav_item"><Link to="/user">Thông tin cá nhân</Link></div>
+                        <div className={classnames(level > 0 ? "d-block" : "d-none", "nav_item")}><Link to="/dashboard">Trang Admin</Link></div>
+                        <div className="nav_item" onClick={() => handleLogOut()}>Đăng xuất</div>
+                    </div>
+                </div>
+                <div className={classnames(
+                    userAuthenticated ? "d-none" : "d-flex",
+                )}>
+                    <Link className="header_top_auth-link" to="/login" >Login</Link>
+                    <span>{"|"}</span>
+                    <Link className="header_top_auth-link" to="/register" >Register</Link>
+                </div>
             </div>
         </div>
     )
 }
-
-export default HeaderTop
+const mapStateToProps = (state) => {
+    return {
+        info: state.user
+    }
+}
+export default connect(mapStateToProps, null)(HeaderTop)

@@ -2,8 +2,8 @@ POST http://localhost:5000/api/auth/register
 Content-Type: application/json
 
 {
-    "username": "sam12345678",
-    "password": "1234"
+    "username": "testtest10",
+    "password": "123456"
 }
 
 ###
@@ -12,8 +12,8 @@ POST http://localhost:5000/api/auth/login
 Content-Type: application/json
 
 {
-    "username": "sam12345678",
-    "password": "1234"
+    "username": "samsam",
+    "password": "123456"
 }
 
 ###
@@ -28,3 +28,37 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MjAyO
 GET http://localhost:5000/api/posts
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MjAyOGRiYTQ1YmJhNzlhODY4M2RhYTIiLCJpYXQiOjE2NDQzOTQ4MzF9.0p8EBHzoYhpBkfe1ETI0z1bFHAN5uZAVJwX1yjbemoo
+
+###
+GET http://localhost:5000/api/users
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MjE4YzQ2MTE0MGQ2ZDVlNWVlMTgwMDgiLCJpYXQiOjE2NDU3OTA3NDl9.OHBjPIRF0VUYTO8NXO2fVtwPyILGPI6i6zeyVWAxChE
+
+### 
+DELETE  http://localhost:5000/api/users/6218ebe39f630e08d3654e49
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MjE4YzQ2MTE0MGQ2ZDVlNWVlMTgwMDgiLCJpYXQiOjE2NDU3OTA3NDl9.OHBjPIRF0VUYTO8NXO2fVtwPyILGPI6i6zeyVWAxChE
+
+
+###
+POST  http://localhost:5000/api/films
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MjE4ZjhkODNhNWJjN2Q0NzZhM2U3NDgiLCJpYXQiOjE2NDYwNDE2Mjh9.H_s11jKr_ng4opjHOSaY-DHA57ruG0cZ7amVCeIkEdk
+
+{
+    "filmName":"Mật Vụ KingsMan 3: Khởi Nguồn",
+    "year":"2021",
+    "actorName":"Ralph Fiennes, Gemma Arterton, Ralph Fiennes, Gemma Arterton, Rhys Ifans,",
+    "category":"phimle",
+    "country":"Phim Âu Mỹ",
+    "url":"https://www.youtube.com/watch?v=CIdEWFtFh30",
+    "poster":"https://img.phimmoichill.net/images/film/mat-vu-kingsman-3-khoi-nguon.jpg",
+    "description":"2021"
+}
+
+
+
+
+
+
+

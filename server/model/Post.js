@@ -1,21 +1,45 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const PostSchema = new Schema({
-    description: {
-        type: String,
-        required: true,
+// const MessageSchema = new Schema({
+//     username: {
+//         type: 'string',
+//         required: true,
+//     },
+//     content: {
+//         type: String,
+//         required: true,
 
-    },
-    user: {
-        type: Schema.Types.ObjectId,
-        ref: 'users'
-    },
+//     },
+//     createdAt: {
+//         type: Date,
+//         default: Date.now(),
+//     }
+// });
+
+const PostSchema = new Schema({
     film: {
         type: Schema.Types.ObjectId,
         ref: 'films'
     },
-    createdAt:{
+    messages: [
+        {
+            username: {
+                type: String,
+                required: true,
+            },
+            content: {
+                type: String,
+                required: true,
+
+            },
+            createdAt: {
+                type: Date,
+                default: Date.now(),
+            }
+        }
+    ],
+    createdAt: {
         type: Date,
         default: Date.now(),
     }

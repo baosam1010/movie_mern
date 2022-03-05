@@ -2,44 +2,49 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const FilmSchema = new Schema({
-    categories: {
+    category: {
+        type: String,
+        default: "phimle",
+        required: true,
+    },
+    filmName: {
         type: String,
         required: true,
     },
-    filmName : {
-        type: String,
-        required: true,
+    year: {
+        type: Number,
+        required: false,
     },
-    actorName : {
+    actorName: {
+        type: [String],
+        required: false,
+    },
+    description: {
         type: String,
         required: false,
     },
-    description : {
+    poster: {
         type: String,
         required: false,
     },
-    poster:{
+
+    url: {
         type: String,
         required: true,
     },
-    episode:{
-        url: {
-            type: String,
-            required: true,
-        },
-        child:{
-            type: Object,
-            required: false
-        }
-    },
+
     country: {
         type: String,
         required: false,
     },
-    createdAt : {
+    episode: {
+        type: [Object],
+        required: false,
+    },
+    createdAt: {
         type: Date,
         default: Date.now(),
-        required: false,
+        required: true,
     }
 });
 

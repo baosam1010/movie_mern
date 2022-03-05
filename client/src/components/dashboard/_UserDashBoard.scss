@@ -1,0 +1,75 @@
+.dashboard_user {
+    padding: 20px 0;
+    h1 {
+        margin-bottom: 10px;
+        color: black;
+        font-size: 24px;
+        margin-left: 10px;
+
+        @include md {
+            margin-left: 0;
+        }
+    }
+    &_form {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        padding: 10px 20px;
+        margin: 0 10px;
+        gap: 20px;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: rgba(99, 99, 99, 0.2) 0 0 8px 8px;
+        @include md {
+            margin: 0;
+            grid-template-columns: repeat(4, 1fr);
+        }
+        .field_wrapper {
+            display: flex;
+            flex-direction: column;
+            input {
+                border: 1px solid gray;
+                padding: 10px 20px;
+                font-size: 16px;
+                border-radius: 9999px;
+            }
+            select {
+                border: 1px solid gray;
+                padding: 10px 20px;
+                font-size: 16px;
+                border-radius: 9999px;
+                width: 100%;
+                @include md {
+                    grid-template-columns: span 1;
+                }
+
+                -moz-appearance: none; /* Firefox */
+                -webkit-appearance: none; /* Safari and Chrome */
+                appearance: none;
+            }
+            .field_message {
+                margin-top: 16px;
+                font-size: 16px;
+                color: red;
+                padding-left: 20px;
+            }
+        }
+        div:first-child {
+            grid-column-start: span 2;
+
+            @include md {
+                grid-column-start: span 3;
+            }
+        }
+        button {
+            border: 1px solid gray;
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: 500;
+            border-radius: 9999px;
+
+            &:hover {
+                background-color: rgba(0, 0, 0, 0.5);
+            }
+        }
+    }
+}

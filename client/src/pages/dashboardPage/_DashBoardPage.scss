@@ -1,0 +1,272 @@
+.dashboard {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    background-color: white;
+    padding: 20px 0;
+    @include md {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 20px;
+    }
+
+    &_sidebar {
+        grid-column-start: span 1;
+        margin-bottom: 20px;
+        padding: 0 10px;
+
+        .sidebar_wrapper {
+            border-radius: 20px;
+            @include bkgimg();
+            padding: 20px 0;
+        }
+        .sidebar_list {
+            padding-left: 0;
+            list-style-type: none;
+        }
+        .sidebar_item {
+            width: 100%;
+            padding-left: 20px;
+            a {
+                display: block;
+
+                text-decoration: none;
+                color: $white;
+                font-size: 18px;
+                font-weight: 600;
+                padding: 8px 0;
+            }
+            &:hover {
+                background-color: rgba(216, 137, 217, 0.729);
+            }
+        }
+        .sidebar_item:last-child {
+            margin-bottom: 0px;
+        }
+    }
+
+    &_main {
+        grid-column-start: span 3;
+        .main_wrapper {
+            .form_search {
+                display: flex;
+                position: relative;
+
+                border-radius: 8px;
+                border: 1px solid rgb(134, 129, 129);
+
+                margin: 0 10px 10px;
+                @include md {
+                    margin: 0 0 10px;
+                }
+                overflow: hidden;
+                input {
+                    width: 100%;
+                    padding: 10px;
+                    font-size: 16px;
+                    font-weight: 500;
+                }
+                button {
+                    position: absolute;
+                    right: 0;
+                    line-height: 38px;
+                    padding: 0 8px;
+                    background-color: #cccccc;
+                    font-weight: 500;
+                }
+            }
+            .btn_addFilm {
+                margin: 20px 0 10px 10px;
+                padding: 10px;
+                width: 120px;
+                text-align: center;
+                border-radius: 8px;
+                color: $white;
+                font-size: 18px;
+                @include bkgimg;
+                @include md {
+                    margin-left: 0;
+                }
+            }
+            .form_create {
+                margin: 20px 0;
+                padding: 20px;
+                border-radius: 20px;
+                box-shadow: rgba(42, 47, 51, 0.2) 4px 8px 24px;
+
+                grid-template-columns: repeat(2, 1fr);
+                gap: 20px;
+
+                .item_wrapper {
+                    grid-column-start: span 1;
+                    display: flex;
+                    flex-direction: column;
+
+                    .form_item {
+                        border: 1px solid rgb(134, 129, 129);
+                        display: block;
+                        width: 100%;
+                        border-radius: 8px;
+                        padding: 8px;
+                        &:focus {
+                            border-color: greenyellow;
+                        }
+                        input {
+                            width: 100%;
+                        }
+                    }
+                }
+                .item_wrapper:first-child {
+                    grid-column-start: span 2 !important;
+                }
+                .form_textarea {
+                    grid-column-start: span 2;
+                    border: 1px solid rgb(134, 129, 129);
+                    border-radius: 8px;
+                    overflow: hidden;
+                    &:focus {
+                        border-color: greenyellow;
+                    }
+                    textarea {
+                        padding: 10px;
+                        width: 100%;
+                        height: 200px;
+                    }
+                }
+
+                &_btn {
+                    display: flex;
+                    grid-column-start: span 2;
+                    justify-content: center;
+                    align-items: center;
+
+                    button {
+                        font-size: 16px;
+                        font-weight: 500;
+                        padding: 8px;
+                        border-radius: 8px;
+                        width: 120px;
+                        color: white;
+                        @include bkgimg;
+                        &:hover {
+                            background-color: #ccc;
+                        }
+                        &:last-child {
+                            margin-left: 10px;
+                            background-image: none;
+                            background-color: red;
+                            color: white;
+                        }
+                    }
+                }
+            }
+            .title_list {
+                margin: 0 0 10px 10px;
+                color: black;
+                font-size: 24px;
+                @include md {
+                    margin-left: 0;
+                }
+            }
+            .main_list {
+                display: grid;
+                gap: 10px;
+                grid-template-columns: repeat(2, 1fr);
+                padding: 0 10px 0 10px;
+
+                list-style-type: none;
+                @include sm {
+                    grid-template-columns: repeat(3, 1fr);
+                }
+                @include md {
+                    grid-template-columns: repeat(5, 1fr);
+                    gap: 20px;
+                    padding: 0;
+                }
+                .main_item {
+                    border-radius: 10px;
+                    overflow: hidden;
+                    .item_link {
+                        position: relative;
+                        .item_img {
+                            overflow: hidden;
+                            position: relative;
+                            img {
+                                aspect-ratio: 1/1;
+                                width: 100%;
+                            }
+                        }
+                        .item_name {
+                            width: 100%;
+                            overflow: hidden;
+
+                            position: absolute;
+                            bottom: 0;
+
+                            background-color: rgba(63, 58, 58, 0.6);
+
+                            p {
+                                overflow: hidden;
+                                -webkit-line-clamp: 2;
+                                -webkit-box-orient: vertical;
+                                text-overflow: ellipsis;
+                                word-break: break-word;
+                                white-space: nowrap;
+
+                                color: $white;
+                                font-size: 16px;
+                                font-weight: 600;
+                                padding: 6px 10px;
+                            }
+                        }
+                    }
+                    .item_btn {
+                        display: flex;
+                        justify-content: space-between;
+                        button {
+                            width: 50%;
+                            font-weight: 500;
+                            font-size: 16px;
+                            color: $white;
+                            &:hover {
+                                opacity: 0.6;
+                            }
+                        }
+                        .btn_delete {
+                            background-color: rgb(236, 46, 20);
+                        }
+                        .btn_update {
+                            background-color: rgb(102, 202, 77);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    &_pagination {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 40px;
+        span {
+            padding: 4px 8px;
+            background-color: #929090dc;
+            border-radius: 4px;
+            color: $white;
+            font-weight: 600;
+            font-size: 16px;
+
+            cursor: pointer;
+            &:hover {
+                background-color: rgba(19, 18, 18, 0.6);
+            }
+        }
+        span:nth-child(2) {
+            margin: 0 10px;
+            cursor: default;
+        }
+    }
+}
+.activeLink {
+    background-color: rgba(216, 137, 217, 0.729);
+}

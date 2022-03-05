@@ -1,17 +1,35 @@
+@mixin textgradient() {
+    color: transparent;
+    background-clip: text;
+    -webkit-background-clip: text;
+    background-image: linear-gradient(to right, rgb(137, 64, 233), rgb(194, 64, 233));
+}
+@mixin bkgimg {
+    background-image: linear-gradient(to bottom right, rgb(137, 64, 233), rgb(194, 64, 233));
+}
+@mixin truncate($i: 1) {
+    display: -webkit-box;
+    -webkit-line-clamp: $i;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: pre-line;
+    word-break: break-word;
+}
 
-@mixin sm(){
+@mixin sm() {
     @media screen and (min-width: 576px) {
         @content;
     }
-};
+}
 
-@mixin md(){
+@mixin md() {
     @media screen and (min-width: 960px) {
         @content;
     }
-};
-@mixin lg(){
+}
+@mixin lg() {
     @media screen and (min-width: 1200px) {
         @content;
     }
-};
+} ;

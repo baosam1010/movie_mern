@@ -4,7 +4,7 @@ html {
 body {
     font-family: $primary-font;
     font-size: 16px;
-    line-height: 1;
+    line-height: 1.5;
     color: $gray-light;
     margin: 0 auto;
     
@@ -29,3 +29,15 @@ select {
 input {
     line-height: normal;
 };
+.d-none{
+    display: none;
+}
+.d-block{
+    display: block;
+}
+.d-flex{
+    display: flex;
+}
+.d-grid{
+    display: grid;
+}

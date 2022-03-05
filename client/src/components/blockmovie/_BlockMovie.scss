@@ -11,6 +11,10 @@
             background-clip: text;
             -webkit-background-clip: text;
             background-image: linear-gradient(to right, #8f2cff, #ff00ff);
+            font-size: 20px;
+            @include md {
+                font-size: 24px;
+            }
         }
         a {
             text-decoration: none;
@@ -18,31 +22,50 @@
             padding: 8px 8px;
             border-radius: 4px;
             background-color: $white;
+            font-size: 12px;
             &:hover {
                 text-decoration: underline;
             }
+            @include md {
+                font-size: 16px;
+            }
         }
-        margin-bottom:  20px;
+        margin-bottom: 20px;
     }
     .list {
         width: 100%;
         display: grid;
-        grid-template-columns: repeat(6, 1fr);
+        grid-template-columns: repeat(2, 1fr);
         gap: 10px;
         list-style-type: none;
         position: relative;
-        padding-left: 0;
-        padding-bottom: 20px;
+        padding: 0 10px 20px;
+        @include sm {
+            grid-template-columns: repeat(3, 1fr);
+        }
+        @include md {
+            grid-template-columns: repeat(6, 1fr);
+        }
     }
     .item {
         position: relative;
-        img {
-            width: 100%;
-            object-fit: fill;
-            height: 190px;
+        a {
+            display: block;
+            overflow: hidden;
             border-radius: 10px;
+
+            img {
+                width: 100%;
+                object-fit: fill;
+                height: 190px;
+                &:hover {
+                    transform: scale(1.05);
+                    transition: ease-in-out 0.5s;
+                }
+            }
         }
         span {
+            z-index: 1;
             position: absolute;
             top: 0;
             left: 0;
@@ -66,23 +89,22 @@
                 transform: translate(-50%, 120%);
             }
         }
-        
+
         p {
             position: absolute;
             width: 100%;
             background-color: rgba(20, 17, 17, 0.8);
             bottom: 0;
-            padding: 10px 0 10px 20px; 
-            color:  white;
+            padding: 10px 0 10px 20px;
+            color: white;
             border-bottom-right-radius: 10px;
             border-bottom-left-radius: 10px;
         }
     }
-    .item:first-child{
+    .item:first-child {
         grid-column-start: span 2;
         grid-row-start: span 2;
         img {
-           
             height: 390px;
         }
     }

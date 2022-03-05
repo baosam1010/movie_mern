@@ -7,7 +7,7 @@ function Footer() {
             <div className="container">
                 <div className="footer_logo ">
                     <Link to="/">
-                        <i className="fal fa-camera-movie"></i>
+                        <i className="fa-solid fa-video"></i>
                         <span>SamMovie</span>
                     </Link>
                 </div>

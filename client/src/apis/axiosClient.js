@@ -2,16 +2,33 @@ import axios from 'axios';
 import queryString from 'query-string';
 
 
-const axiosClient = axios.create({
-    baseURL: process.env.REACT_APP_API_URL,
-    headers: {
-        'content-type': 'application/json',
-    },
-    paramsSerializer: params => queryString.stringify(params),
-});
+let axiosClient = axios.create(
+    {
+        baseURL: process.env.REACT_APP_API_URL,
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        paramsSerializer: params => queryString.stringify(params),
+    }
+);
+
 
 axiosClient.interceptors.request.use(async (config) => {
     // Handle token here ...
+
+    if (config.headers.Authorization) {
+        axiosClient.defaults.headers.common['Authorization'] = config.headers.Authorization;
+        
+
+
+    } else {
+        delete axiosClient.defaults.headers.common['Authorization']
+        
+    }
+    // console.log('config:',config.headers)
+
+
+
     return config;
 });
 
@@ -22,8 +39,10 @@ axiosClient.interceptors.response.use((response) => {
     return response;
 }, (error) => {
     // Handle errors
-    throw error;
+    if (error.response.data) return error.response.data
+    else return { success: false, message: error.message }
 });
+
 export default axiosClient;
 
 

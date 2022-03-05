@@ -1,8 +1,9 @@
 @mixin center() {
+    grid-column-start: span 1;
     display: flex;
     flex-direction: column;
     align-items: center;
-    h4{
+    h4 {
         padding-bottom: 10px;
     }
     &-list {
@@ -15,7 +16,7 @@
         text-decoration: none;
         color: $white;
         margin: 10px 0;
-        &:hover{
+        &:hover {
             text-decoration: underline;
         }
     }
@@ -27,14 +28,33 @@
     padding-top: 20px;
 
     .container {
-        display: flex;
-        justify-content: space-between;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+        padding: 0 10px;
+        @include md {
+            grid-template-columns: repeat(4, 1fr);
+
+        }
     }
 
     &_logo {
+        display: none;
+        @include md {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
         a {
+            display: block;
             text-decoration: none;
             color: $white;
+        }
+        i{
+            display: block;
+            font-size: 50px;
+            margin-bottom: 10px;
         }
     }
     &_category {

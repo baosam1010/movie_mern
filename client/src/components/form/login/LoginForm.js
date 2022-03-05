@@ -1,20 +1,63 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Formik } from 'formik';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import * as Yup from 'yup';
+import { useDispatch, connect } from 'react-redux';
+import { Login } from '../../../actions/Actions';
+
+const SignupSchema = Yup.object().shape({
+    username: Yup.string()
+        .min(6, 'Bạn cần nhập ít nhất 6 kí tự!')
+        .max(50, 'Tên người dùng quá dài!')
+        .required('Bạn cần nhập tên người dùng'),
+    password: Yup.string()
+        .min(2, 'Too Short!')
+        .max(50, 'Too Long!')
+        .required('Required'),
+});
+
+function LoginForm(props) {
+    const { info } = props;
+    const { message, userAuthenticated } = info;
+    const [formLogin, setFormLogin] = useState({
+        username: "",
+        password: "",
+    });
+
+    let navigated = useNavigate();
+    let dispatch = useDispatch();
 
 
-function LoginForm() {
+    useEffect(() => {
+        const getLogin = async () => {
+            try {
+
+                if (formLogin.username !== "" && formLogin.password !== "") {
+                    dispatch(Login(formLogin))
+                }
+
+            } catch (error) {
+                    throw error
+            }
+        }
+        getLogin();
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [formLogin]);
+    useEffect(() => {
+        if (userAuthenticated) {
+            navigated('/info/tenfilm-id', { replace: true })
+        }
+    }, [navigated, userAuthenticated])
 
     return (
         <div className="login">
-            <h2 className="login_title">Login</h2>
+            <h2 className="login_title">Đăng nhập</h2>
             <Formik
-                initialValues={{ name: '', password: '' }}
-                onSubmit={(values, actions) => {
-                    setTimeout(() => {
-                        alert(JSON.stringify(values, null, 2));
-                        actions.setSubmitting(false);
-                    }, 1000);
+                initialValues={formLogin}
+                validationSchema={SignupSchema}
+                onSubmit={(values) => {
+                    setFormLogin({ ...formLogin, ...values })
                 }}
             >
                 {props => (
@@ -23,14 +66,14 @@ function LoginForm() {
                             type="text"
                             onChange={props.handleChange}
                             onBlur={props.handleBlur}
-                            value={props.values.name}
-                            name="name"
+                            value={props.values.username}
+                            name="username"
                             className="login_input"
                             placeholder="Nhập tên người dùng..."
                         />
-                        {props.errors.name && <div id="feedback">{props.errors.name}</div>}
+                        {message ? (<div>{message}</div>) : (props.errors.username && <div className="error">{props.errors.username}</div>)}
                         <input
-                            type="text"
+                            type="password"
                             onChange={props.handleChange}
                             onBlur={props.handleBlur}
                             value={props.values.password}
@@ -38,8 +81,7 @@ function LoginForm() {
                             className="login_input"
                             placeholder="Nhập mật khẩu của bạn"
                         />
-                        {props.errors.password && <div id="feedback">{props.errors.password}</div>}
-
+                        {message ? (<div>{message}</div>) : (props.errors.password && <div className="error">{props.errors.password}</div>)}
                         <div className="login_wrapper">
                             <button type="submit" className="login_btn btn_login">Đăng Nhập</button>
                             <Link to="/" className="login_btn btn_cancel">Hủy</Link>
@@ -52,4 +94,9 @@ function LoginForm() {
     )
 }
 
-export default LoginForm
+const mapStateToProps = (state) => {
+    return {
+        info: state.user
+    }
+}
+export default connect(mapStateToProps, null)(LoginForm)
