@@ -11,8 +11,9 @@ function BlockMovie(props) {
         const getFilms = async () => {
             try {
                 const params = {
+                    category: sublink,
+                    arrangement: 'createdAt',
                     limit: 12,
-                    search: sublink
                 }
                 const resp = await filmApi.getFilms(params);
                 setFilms(resp.listFilm)

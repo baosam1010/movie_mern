@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Field, Form, Formik } from 'formik';
 import classnames from 'classname';
-import { useResolvedPath, useMatch, Link, Routes, Route, } from 'react-router-dom';
+import { useResolvedPath, useMatch, Link, Routes, Route, useParams, useLocaltion, useLocation, } from 'react-router-dom';
 import MovieDashBoard from '../../components/dashboard/MovieDashBoard';
 import UserDashBoard from '../../components/dashboard/UserDashBoard';
 
@@ -9,6 +9,14 @@ import UserDashBoard from '../../components/dashboard/UserDashBoard';
 
 
 function DashBoard() {
+  const [init, setInit] = useState({
+    pages: 1,
+    limit: 4,
+    search: ""
+  });
+  const [totalPages, setTotalPages] = useState()
+  const {pathname} = useLocation();
+  console.log('params:', pathname)
 
   function CustomLink(linkProps) {
     const { to, lable } = linkProps;
@@ -26,7 +34,25 @@ function DashBoard() {
         <Link to={to} >{lable} </Link>
       </li>
     );
-  }
+  };
+
+  useEffect(() => {
+    setInit({
+      pages: 1,
+      limit: 4,
+      search: ""
+    })
+    if(init.search !==""){
+      setInit({
+        ...init,
+        pages: 1, 
+      })
+    }
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pathname, init.search]);
+
+  console.log('dash:',init, totalPages)
 
   return (
     <div className='dashboard'>
@@ -47,14 +73,16 @@ function DashBoard() {
 
           {/* Search  */}
           <Formik
-            initialValues={{ movie: '', }}
+            initialValues={{ search: '', }}
             onSubmit={(values, actions) => {
               console.log(values);
+              setInit({...init, search: values.search, pages: 1});
+              actions.resetForm();
             }}
           >
             {() => (
               <Form className="form_search">
-                <Field type="text" name="movie" placeholder="Bạn muốn tìm gì?" />
+                <Field type="text" name="search" placeholder="Bạn muốn tìm gì?" />
                 <button type="submit">Search</button>
               </Form>
             )}
@@ -62,15 +90,44 @@ function DashBoard() {
 
           {/* Route children */}
           <Routes>
-            <Route index element={<MovieDashBoard />} />
-            <Route path="users" element={<UserDashBoard  />} />
+            <Route 
+              index
+              element={<MovieDashBoard
+                init={init}
+                setInit={setInit}
+                totalPages={totalPages}
+                setTotalPages={(num)=>setTotalPages(num)}
+
+              />}
+
+            />
+            <Route
+              path="users"
+              element={<UserDashBoard
+                init={init}
+                setInit={setInit}
+                totalPages={totalPages}
+                setTotalPages={(num)=>setTotalPages(num)}
+              />}
+
+            />
           </Routes>
 
           {/* pagination movie */}
           <div className="dashboard_pagination">
-            <span><i className="fa-solid fa-arrow-left-long"></i></span>
-            <span className="dashboard_page">1</span>
-            <span><i className="fa-solid fa-arrow-right-long"></i></span>
+            <button type="button"
+              onClick={() => init.pages <= 1 ? setInit({ ...init, pages: 1 }) : setInit({ ...init, pages: init.pages - 1 })}
+              disabled={init.pages === 1 ? true : false}
+            >
+              <i className="fa-solid fa-arrow-left-long"></i>
+            </button>
+            <span className="dashboard_page">{init.pages}</span>
+            <button type="button"
+              onClick={() => init.pages >= totalPages ? setInit({ ...init, pages: totalPages }) : setInit({ ...init, pages: init.pages + 1 })}
+              disabled={init.pages === totalPages ? true : false}
+            >
+              <i className="fa-solid fa-arrow-right-long"></i>
+            </button>
           </div>
         </div>
       </div>

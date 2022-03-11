@@ -1,14 +1,19 @@
 import { connect, useDispatch } from 'react-redux';
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import classnames from 'classname';
 import { LoadUser } from '../../actions/Actions';
 
 
 function HeaderTop(props) {
-    const bar= useRef();
+    const bar = useRef();
+
+    const [search, setSearch] = useState('')
     const negative = useNavigate();
     const dispatch = useDispatch();
+
+
+
     const { info } = props;
     const { userAuthenticated, user } = info;
 
@@ -25,9 +30,27 @@ function HeaderTop(props) {
         negative('/')
     };
 
-    const handleChange=()=>{  
-       bar.current.classList.toggle('d-block');
+    const handleChange = () => {
+        bar.current.classList.toggle('d-block');
     };
+    const handleChangeInput = (e) => {
+        const value = e.target.value
+        setSearch(value);
+    };
+    const handleClick = () => {
+        if (search !== "") {
+            // let newSeaerch = search.normalize('NFD').toLowerCase().trim()
+            //     .replace(/[đĐ]/g, 'd')
+            //     .replace(/[\u0300-\u036f]/g, '')
+            //     .replace(/\W+/g, ' ')
+            //     .replace(/\s/g, '-');
+
+            // console.log('searchHeader:', newSeaerch)
+            negative(`/list?search=${search}&arrangement=createdAt&pages=1&category=`)
+            setSearch("");
+
+        }
+    }
 
     return (
         <div className="header_top">
@@ -49,8 +72,18 @@ function HeaderTop(props) {
                 </Link>
             </div>
             <div className="header_top_search">
-                <input type="text" className="header_top_search-input" />
-                <button type="button" className="header_top_search-btn">Search</button>
+                <input type="text"
+                    className="header_top_search-input" value={search}
+                    onChange={(e) => handleChangeInput(e)}
+                    onKeyPress={(e) => e.key === "Enter" ? handleClick() : null}
+
+                />
+                <button
+                    className="header_top_search-btn"
+                    onClick={handleClick} disabled={search.trim() === "" ? true : false}
+                >
+                    Search
+                </button>
             </div>
             <div className="header_top_auth">
                 <div className={classnames(

@@ -20,12 +20,17 @@ export const  paths = [
         authRoute:'register',
         element: Auth
     },
+   
     {
         path:"/info/:slug",
         element: FilmPage
     },
     {
         path:"/list/:slug",
+        element: ListPage
+    },
+    {
+        path:"/list",
         element: ListPage
     },
     {

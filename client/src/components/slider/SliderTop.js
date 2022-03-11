@@ -46,7 +46,8 @@ function SliderTop() {
         const getSlide = async () => {
             try {
                 const params = { 
-                    limit: 9,    
+                    limit: 9,
+                    arrangement: 'createdAt',    
                 }
                 const resp = await filmApi.getFilms(params);
                 setFilmSlide(resp.listFilm);

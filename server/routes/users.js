@@ -9,16 +9,36 @@ const mongoose = require('mongoose');
 //@desc Get ALl Users
 //@access Pravite
 router.get('/', verifyToken, async (req, res) => {
+    const { limit, search, pages } = req.query;
+    console.log('getUsers', req.query)
     try {
+        let conditions;
+        let users;
+        let count;
+
         const user = await User.findById(req.userId)
         if (!user) {
             return res.status(400)
                 .json({ success: false, message: 'User not found' })
+        };
+        if(search !== ""){
+            conditions = {
+                username: search
+            }
+
+            users = await User.find(conditions).sort({role: -1}).skip(parseInt(pages) - 1).limit(limit);
+            count = await User.count(conditions).countDocuments();
+            console.log(count)
+        }else{
+            users = await User.find().sort({role: -1}).skip(parseInt(pages) - 1).limit(limit)
+            count = await User.count().countDocuments();
+            console.log(count)
+
         }
-        const users = await User.find({})
         const { role } = user;
+
         if (role > 0) {
-            return res.json({ success: true, message: "Get all user success!", users })
+            return res.json({ success: true, message: "Get all user success!", users, totalPages: Math.ceil(count/limit) })
         } else {
             return res.status(400).json({ success: false, message: "Bạn không có quyền truy cập" })
         }
@@ -85,20 +105,20 @@ router.put('/:id', verifyToken, async (req, res) => {
             return res.status(400)
                 .json({ success: false, message: 'User admin not found' })
         }
-        if(user.role > 0 || user.role === 0){
-            const userUpdate = await User.findByIdAndUpdate(req.params.id, { 
+        if (user.role > 0 || user.role === 0) {
+            const userUpdate = await User.findByIdAndUpdate(req.params.id, {
                 username,
-                password, 
+                password,
                 _id: req.params.id,
                 role,
                 createdAt,
                 _v
-            }, {new: true})
+            }, { new: true })
             if (!userUpdate) {
                 return res.status(400)
                     .json({ success: false, message: 'User needs to be updated not found' })
             }
-            res.json({success: true, message:"Update User success", userUpdate})
+            res.json({ success: true, message: "Update User success", userUpdate })
         }
 
 

@@ -81,6 +81,7 @@
                 border-radius: 8px;
                 color: $white;
                 font-size: 18px;
+                cursor: pointer;
                 @include bkgimg;
                 @include md {
                     margin-left: 0;
@@ -112,6 +113,36 @@
                         input {
                             width: 100%;
                         }
+                    }
+                    .delete_item {
+                        display: block;
+                        margin-top: 10px;
+                        padding: 4px 8px;
+                        border-radius: 8px;
+                        background-color: red;
+
+                        color: white;
+                        font-weight: 500;
+                        margin: 10px auto 0;
+                        &:hover {
+                            background-color: rgba(255, 0, 0, 0.6);
+                        }
+                    }
+                    .add_item {
+                        padding: 8px 0;
+                        border-radius: 8px;
+                        background-color: rgb(3, 133, 3);
+                        color: white;
+                        font-weight: 500;
+                        &:hover {
+                            background-color: rgba(7, 121, 7, 0.842);
+                        }
+                    }
+                    .episode{
+                        padding: 10px;
+                        border: 1px solid black;
+                        border-radius: 16px;
+                        overflow: hidden;
                     }
                 }
                 .item_wrapper:first-child {
@@ -248,8 +279,8 @@
         justify-content: center;
         align-items: center;
         margin-top: 40px;
-        span {
-            padding: 4px 8px;
+        button {
+            padding: 8px 16px;
             background-color: #929090dc;
             border-radius: 4px;
             color: $white;
@@ -260,6 +291,14 @@
             &:hover {
                 background-color: rgba(19, 18, 18, 0.6);
             }
+        }
+        .dashboard_page{
+            margin: 0 10px;
+            cursor: default;
+            padding: 8px 16px;
+            color: $white;
+            border-radius: 4px;
+            @include bkgimg;
         }
         span:nth-child(2) {
             margin: 0 10px;

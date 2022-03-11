@@ -9,6 +9,7 @@ import { Field, Form, Formik } from 'formik';
 
 
 function UserDashBoard(props) {
+    const { init, setTotalPages } = props;
     const dispatch = useDispatch();
 
     const [userArr, setUserArr] = useState();
@@ -38,9 +39,13 @@ function UserDashBoard(props) {
 
         const getUsers = async () => {
             try {
-                if (localStorage[LocalStorage_TokenName]) {
-                    const resp = await userApi.getAll(localStorage[LocalStorage_TokenName]);
-                    setUserArr(resp.users)
+                if (localStorage[LocalStorage_TokenName] && init) {
+                    const resp = await userApi.getAll({
+                        ...init,
+                        token: localStorage[LocalStorage_TokenName]
+                    });
+                    setUserArr(resp.users);
+                    setTotalPages(resp.totalPages)
                 }
 
             } catch (error) {
@@ -71,7 +76,7 @@ function UserDashBoard(props) {
         getUsers();
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [dispatch, userId]);
+    }, [dispatch, userId, init.pages, init.search]);
 
     const handleChange = (data) => {
         setUserId({ ...userId, ...data })
@@ -81,7 +86,7 @@ function UserDashBoard(props) {
         let html = null;
         if (users) {
             html = users.map(item => {
-                const {_id: id, username} = item
+                const { _id: id, username } = item
                 return (<ItemDashBoard
                     key={id}
                     id={id}

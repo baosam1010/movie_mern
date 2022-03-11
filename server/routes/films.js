@@ -11,17 +11,90 @@ const User = require('../model/User');
 //@desc  Get all film
 //@access public
 router.get('/', async (req, res) => {
-    const { pages, search, limit } = req.query;
+    const { pages, search: key, arrangement, limit, category } = req.query;
+    console.log('query:', req.query);
+
 
     try {
-        let films
-        if (!search) {
-            films = await Film.find().sort({ createdAt: -1 }).limit(limit);
+        let skip;
+        let count;
+        let films;
+        let conditions;
+        let sorted = {};
+        sorted[arrangement] = -1;
+
+        switch (true) {
+            case (key === "" && category === ""):
+                console.log('vao ')
+
+                return null;
+            case (key !== "" && !category):
+                console.log('vao 1')
+                conditions = {
+                    $text: {
+                        $search: key,
+                    }
+                };
+                break;
+            case (key === "" && !category):
+                console.log('vao 2')
+                conditions = {};
+                break;
+            case (!key && !category):
+                console.log('vao 3')
+
+                conditions = null;
+                break;
+            case (!category && key !== ""):
+                console.log('vao 4')
+                conditions = {
+                    $text: {
+                        $search: key,
+                    }
+                };
+                break;
+            case (category === "" && key !== ""):
+                console.log('vao 5')
+                conditions = {
+                    $text: { $search: key }
+                };
+                break;
+            case (category !== "" && !key):
+                conditions = {
+                    category
+                };
+                break;
+            case (category !== "" && key === ""):
+                conditions = {
+                    category
+                };
+                break;
+            case (category !== "" && key !== ""):
+                conditions = {
+                    $text: { $search: key },
+                    category,
+                };
+                break;
+            default: conditions = {};
+        };
+        if (conditions !== null) {
+            if (parseInt(pages) > 0 && limit) {
+                skip = (parseInt(pages) - 1) * limit;
+                films = await Film.find(conditions)
+                    .sort(sorted)
+                    .skip(skip)
+                    .limit(limit)
+                count = await Film.countDocuments(conditions);
+                console.log('count:', count)
+
+            } else {
+                count = await Film.countDocuments(conditions);
+                films = await Film.find(conditions).sort(sorted).limit(limit);
+            }
         } else {
-            films = await Film.find({ category: search }).sort({ createdAt: -1 }).limit(limit);
-        } 
-        if(!search && !limit){
-            films = await Film.find();            
+            console.log('khong co condition')
+            count = await Film.countDocuments();
+            films = await Film.find().sort(sorted).limit(limit);
         }
 
         if (!films) {
@@ -32,7 +105,8 @@ router.get('/', async (req, res) => {
         res.json({
             success: true,
             message: "Films found",
-            listFilm: films
+            listFilm: films,
+            totalPages: Math.ceil(count / limit),
         })
 
     } catch (error) {
@@ -77,10 +151,16 @@ router.get('/:id', async (req, res) => {
 
 router.post('/', verifyToken, async (req, res) => {
     const { category, filmName, actorName, description, poster,
-        country, url, year } = req.body;
-    console.log(req.body);
+        country, url, year, episode } = req.body;
+    // console.log(req.body);
+
     // simple validate
-    if (!filmName || !poster || !url) {
+    if (category === "phimbo") {
+        if (!filmName || !poster) {
+            return res.status(404)
+                .json({ message: "Add film failed", sucess: false });
+        }
+    } else if (!filmName || !poster || !url) {
         return res.status(404)
             .json({ message: "Add film failed", sucess: false });
     }
@@ -92,7 +172,7 @@ router.post('/', verifyToken, async (req, res) => {
         } else if (user.role > 0) {
             const newfilm = new Film({
                 category, filmName, actorName, description, poster,
-                country, url, year
+                country, url, year, episode
 
             })
             await newfilm.save();
@@ -116,8 +196,16 @@ router.post('/', verifyToken, async (req, res) => {
 router.put('/:id', verifyToken, async function (req, res) {
     const { id } = req.params;
     const { category, filmName, actorName, description, poster,
-        country, url, year } = req.body;
-    if (filmName === "" || url === "") {
+        country, url, year, episode } = req.body;
+    console.log('body:', req.body)
+    if (category === "phimbo") {
+        if (filmName === "") {
+            return res.status(400).json({
+                message: "You need to fill all the field",
+                success: false,
+            })
+        }
+    } else if (filmName === "" || url === "") {
         return res.status(400).json({
             message: "You need to fill all the field",
             success: false,
@@ -132,8 +220,15 @@ router.put('/:id', verifyToken, async function (req, res) {
             })
         };
         const newFilm = await Film.findByIdAndUpdate(id, {
-            category, filmName, actorName, description, poster,
-            country, url, year
+            category,
+            filmName,
+            actorName,
+            description,
+            poster,
+            country,
+            url,
+            year,
+            episode
         }, { new: true });
         if (!newFilm) {
             return res.status(400).json({

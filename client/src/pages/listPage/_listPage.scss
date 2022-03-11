@@ -153,6 +153,12 @@
             color: white;
             border-bottom-right-radius: 10px;
             border-bottom-left-radius: 10px;
+            
+ 
+            overflow: hidden;
+            -webkit-line-clamp:1;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
     }
 }
@@ -161,9 +167,9 @@
     justify-content: center;
     align-items: center;
     &_wrapper {
-        display: inline-block;
-        a {
-            color: $white;
+        display: flex;
+
+        button {
             font-weight: 600;
             float: left;
             padding: 8px 16px;
@@ -173,8 +179,14 @@
                 background-color: #dddddd;
             }
         }
+        .page{
+            padding: 8px 16px;
+            border-radius: 4px;
+            margin: 0 8px;
+            color: $white;
+
+            background-image: linear-gradient(to right, rgb(137, 64, 233), rgb(194, 64, 233));
+        }
     }
 }
-.active {
-    background-image: linear-gradient(to right, rgb(137, 64, 233), rgb(194, 64, 233));
-}
+

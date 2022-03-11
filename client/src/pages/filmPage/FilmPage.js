@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom';
 import { Field, Form, Formik, } from 'formik';
 import { connect } from 'react-redux';
 import filmApi from '../../apis/filmApi';
 import io from 'socket.io-client';
+import classnames from 'classname';
 
 let socket = io('localhost:5000');
 
@@ -12,19 +13,21 @@ function FilmPage({ info }) {
   const [posts, setPosts] = useState([]);
   const [film, setFilm] = useState();
   const param = useParams();
+  const iframeRef = useRef();
+
   const { userAuthenticated, user } = info;
   let name;
 
   if (userAuthenticated && user !== null) {
     const { username } = info.user;
     name = username;
-  }
+  };
 
   const initialVale = {
     content: '',
     username: '',
     filmId: param.slug,
-  }
+  };
 
   useEffect(() => {
     const getFilm = async () => {
@@ -34,12 +37,14 @@ function FilmPage({ info }) {
       } catch (error) {
         throw error
       }
-    }
+    };
     getFilm();
-    return ()=>{
+    return () => {
       setFilm()
-    }
+    };
   }, [param]);
+
+
   useEffect(() => {
 
     socket.emit('join', { room: param.slug, user }, (error) => {
@@ -47,8 +52,8 @@ function FilmPage({ info }) {
         alert(error);
       }
     });
-    return ()=>{
-      
+    return () => {
+
     }
   }, [name, param.slug, user]);
 
@@ -65,7 +70,7 @@ function FilmPage({ info }) {
   }, []);
 
   const showFilm = (film) => {
-    const { poster, filmName, url, year, actorName, country, description } = film;
+    const { poster, filmName, url, year, actorName, country, description, episode } = film;
     let html = null;
 
     const showActor = (actorName) => {
@@ -77,26 +82,78 @@ function FilmPage({ info }) {
       return result;
     };
 
+    const setUrl = (url, e) => {
+      if (url === 1) {
+        window.scrollTo(0, 140);
+        iframeRef.current.src += "?autoplay=1";
+      } else {
+        const currentAct = document.getElementsByClassName('actVideo');
+        currentAct[0].classList.remove('actVideo');
+
+        e.target.classList.add("actVideo")
+        console.log('e:', e.target.className);
+
+        window.scrollTo(0, 140);
+        iframeRef.current.src = url;
+        iframeRef.current.src += "?autoplay=1";
+      }
+    };
+
     html = (
       <>
         {/* Film video */}
         <div className="film_video">
-          <iframe
-            src={url}
-            title="YouTube video player" frameBorder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-            id="video"
-          >
-          </iframe>
+          {url ? (
+            <iframe
+              src={url}
+              title="YouTube video player" frameBorder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+              ref={iframeRef}
+
+            >
+            </iframe>
+          ) :
+            ((url === "" && episode.length > 0) && (
+              <>
+                <iframe
+                  src={episode[0].episodeUrl}
+                  title="YouTube video player" frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                  ref={iframeRef}
+
+                >
+                </iframe>
+                <div className="list_video">
+                  <h3> Tập Phim: </h3>
+                  <ul>
+                    {episode.map((item, index) => {
+                      const { episodeUrl, episodeName } = item;
+                      return (
+                        <li
+                          key={episodeUrl}
+                          onClick={(e) => { setUrl(episodeUrl, e) }}
+                          className={classnames(index === 0 ? "actVideo" : "", "item_video")}
+                        >
+                          {episodeName}
+                        </li>
+                      )
+                    })}
+                  </ul>
+                </div>
+              </>
+            ))
+          }
         </div>
+
         {/* Film infor */}
         <div className="film_info">
           <div className="film_name">
             <img src={poster} alt="imgmovie" />
             <div>
               <h1>{filmName}</h1>
-              <a href="#video" >Xem Phim</a>
+              <button type="button" onClick={() => setUrl(1, null)}>Xem Phim</button>
             </div>
           </div>
 

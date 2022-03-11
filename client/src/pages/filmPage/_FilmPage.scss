@@ -9,6 +9,30 @@
             width: 100%;
             aspect-ratio: 16/9;
         }
+        .list_video {
+            margin-top: 20px;
+            
+            h3 {
+                width: 100%;
+                @include textgradient();
+            }
+            ul{
+                list-style-type: none;
+                display: flex;
+                margin-top: 10px;
+                .item_video{
+                    padding: 6px;
+                    background-color: #696b6d;
+                    margin-right:  8px;
+                    border-radius:4px;
+                    font-weight: 600;
+                    cursor: pointer;
+                    &:hover{
+                        @include bkgimg;
+                    }
+                }
+            }
+        }
     }
     &_info {
         margin-top: 13px;
@@ -100,7 +124,7 @@
                     font-size: 24px;
                 }
             }
-            a {
+            button {
                 background-color: rgb(202, 29, 202);
                 padding: 10px;
                 border-radius: 4px;
@@ -120,7 +144,6 @@
 
         h2 {
             @include textgradient();
-
             padding-bottom: 20px;
         }
         p {
@@ -216,4 +239,7 @@
             }
         }
     }
+}
+.actVideo{
+    @include bkgimg;
 }

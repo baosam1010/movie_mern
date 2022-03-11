@@ -1,12 +1,34 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import {
+  Link,
+  useNavigate,
+  // useLocation, 
+  useParams, useSearchParams
+} from 'react-router-dom';
 import { Field, Form, Formik } from 'formik';
+import filmApi from '../../apis/filmApi';
+
+
 
 
 function ListPage() {
+  const [films, setFilms] = useState();
+  const [totalPages, setTotalPages] = useState();
   const params = useParams();
-  const { slug } = params;
+  const navigated = useNavigate();
+  let [searchParams,] = useSearchParams();
+
+  const [init, setInit] = useState(
+    {
+      arrangement: 'createdAt',
+      category: '',
+      search: '',
+      pages: 1,
+      limit: 4,
+    }
+  )
+  let { slug } = params;
 
   const title = {
     phimle: "Phim lẻ",
@@ -16,18 +38,70 @@ function ListPage() {
     phimtinhcam: "Phim tình cảm",
 
   };
-  const [init, setInit] = useState({
-    category: '',
-    arrangement: 'time'
-  })
+
   useEffect(() => {
-    setInit({ ...init, category: slug })
-    return () => {
-
+    if (slug && title.hasOwnProperty(slug)) {
+      setInit({ ...init, category: slug, search: "" })
     }
-  }, [slug]);
+    else if (searchParams) {
+      let search = searchParams.get('search');
+      let category = searchParams.get('category');
+      let arrangement = searchParams.get('arrangement');
+      setInit({ ...init, search, category, arrangement })
+    };
+
+    const getFilms = async () => {
+      const resp = await filmApi.getFilms(init);
+      // console.log('resp', resp)
+      if (resp) {
+        setFilms(resp.listFilm)
+        setTotalPages(resp.totalPages)
+      }
+    };
+
+    getFilms();
+
+    return () => {
+      setFilms();
+      setInit({
+        arrangement: 'createdAt',
+        category: '',
+        search: '',
+        pages: 1,
+        limit: 4,
+      })
+    };
+  }, [slug,
+    init.arrangement,
+    init.search,
+    init.pages,
+    init.category,
+    searchParams.get('search'),
+    searchParams.get('arrangement'),
+    searchParams.get('category')
+  ]);
+
+  const showFilms = (films) => {
+    let html = null;
+    if (films) {
+      html = films.map(item => {
+        const { poster, filmName, _id: id } = item
+        return (
+          <li key={poster} className="listfilm_item ">
+            <span>HD-VietSub</span>
+            <Link to={`/info/${id}`}  >
+              <img src={poster} alt="" />
+              <p>{filmName}</p>
+            </Link>
+          </li>
+        )
+      })
+    }
+    return html;
+  };
 
 
+  console.log(init)
   return (
     <div className="listfilm">
       <div className="container">
@@ -41,7 +115,7 @@ function ListPage() {
           </li>
           <li>
             <Link to="/">
-              {title[slug]}
+              {title[slug] || searchParams.get('search')}
             </Link>
           </li>
         </ul>
@@ -57,21 +131,35 @@ function ListPage() {
             initialValues={init}
             enableReinitialize={true}
             onSubmit={(values) => {
-              setInit({ ...init, ...values })
+              const { arrangement, category } = values
+              setFilms();
+              if (category !== "" || arrangement !== "") {
+                let keyWord = searchParams.get('search');
+                if (keyWord) {
+                  navigated(`/list?search=${keyWord}
+                    &arrangement=${arrangement}
+                    &category=${category}`)
+                } else {
+                  navigated(`/list?search=&arrangement=${arrangement}&category=${category}`)
+                }
+              }
             }}
           >
             {() => (
               <Form className="form">
-                <Field className="form_select form_item" as="select" name="category">
-                  <option value="phimbo">{title.phimbo}</option>
-                  <option value="phimle">{title.phimle}</option>
-                  <option value="phimhanhdong">{title.phimhanhdong}</option>
-                  <option value="phimtinhcam">{title.phimtinhcam}</option>
-                  <option value="phimvientuong">{title.phimvientuong}</option>
-                </Field>
+                {(!title.hasOwnProperty(slug)) && (
+                  <Field className="form_select form_item" as="select" name="category">
+                    <option>Chọn thể loại</option>
+                    <option value="phimbo">{title.phimbo}</option>
+                    <option value="phimle">{title.phimle}</option>
+                    <option value="phimhanhdong">{title.phimhanhdong}</option>
+                    <option value="phimtinhcam">{title.phimtinhcam}</option>
+                    <option value="phimvientuong">{title.phimvientuong}</option>
+                  </Field>
+                )}
                 <Field className="form_select form_item" as="select" name="arrangement">
-                  <option value="time">Thời gian cập nhật</option>
-                  <option value="view">Lượt xem</option>
+                  <option value="createdAt">Thời gian cập nhật</option>
+                  {/* <option value="view">Lượt xem</option> */}
                   <option value="year">Năm sản xuất</option>
                 </Field>
                 <button type="submit" className="form_submit form_item">Tìm kiếm</button>
@@ -81,137 +169,27 @@ function ListPage() {
         </div>
 
         {/* item substance  */}
+        {(films && films.length === 0) && <h2 className="color-white mt-10">Không tìm thấy phim !!!</h2>}
         <ul className="listfilm_list">
-          <li className="listfilm_item ">
-            <span>HD-VietSub</span>
-            <Link to="/info/tenphim-id"  >
-              <img src="https://i3.wp.com/img.phimmoichill.net/images/info/un-plan-parfait.jpg" alt="" />
-              <p>Tên phim</p>
-            </Link>
-          </li>
-          <li className="listfilm_item ">
-            <span>HD-VietSub</span>
-            <Link to="/info/tenphim-id"  >
-              <img src="https://i3.wp.com/img.phimmoichill.net/images/info/un-plan-parfait.jpg" alt="" />
-              <p>Tên phim</p>
-            </Link>
-          </li>
-          <li className="listfilm_item ">
-            <span>HD-VietSub</span>
-            <Link to="/info/tenphim-id"  >
-              <img src="https://i3.wp.com/img.phimmoichill.net/images/info/un-plan-parfait.jpg" alt="" />
-              <p>Tên phim</p>
-            </Link>
-          </li>
-          <li className="listfilm_item ">
-            <span>HD-VietSub</span>
-            <Link to="/info/tenphim-id"  >
-              <img src="https://i3.wp.com/img.phimmoichill.net/images/info/un-plan-parfait.jpg" alt="" />
-              <p>Tên phim</p>
-            </Link>
-          </li>
-          <li className="listfilm_item ">
-            <span>HD-VietSub</span>
-            <Link to="/info/tenphim-id"  >
-              <img src="https://i3.wp.com/img.phimmoichill.net/images/info/un-plan-parfait.jpg" alt="" />
-              <p>Tên phim</p>
-            </Link>
-          </li>
-          <li className="listfilm_item ">
-            <span>HD-VietSub</span>
-            <Link to="/info/tenphim-id"  >
-              <img src="https://i3.wp.com/img.phimmoichill.net/images/info/un-plan-parfait.jpg" alt="" />
-              <p>Tên phim</p>
-            </Link>
-          </li>
-          <li className="listfilm_item ">
-            <span>HD-VietSub</span>
-            <Link to="/info/tenphim-id"  >
-              <img src="https://i3.wp.com/img.phimmoichill.net/images/info/un-plan-parfait.jpg" alt="" />
-              <p>Tên phim</p>
-            </Link>
-          </li>
-          <li className="listfilm_item ">
-            <span>HD-VietSub</span>
-            <Link to="/info/tenphim-id"  >
-              <img src="https://i3.wp.com/img.phimmoichill.net/images/info/un-plan-parfait.jpg" alt="" />
-              <p>Tên phim</p>
-            </Link>
-          </li>
-          <li className="listfilm_item ">
-            <span>HD-VietSub</span>
-            <Link to="/info/tenphim-id"  >
-              <img src="https://i3.wp.com/img.phimmoichill.net/images/info/un-plan-parfait.jpg" alt="" />
-              <p>Tên phim</p>
-            </Link>
-          </li>
-          <li className="listfilm_item ">
-            <span>HD-VietSub</span>
-            <Link to="/info/tenphim-id"  >
-              <img src="https://i3.wp.com/img.phimmoichill.net/images/info/un-plan-parfait.jpg" alt="" />
-              <p>Tên phim</p>
-            </Link>
-          </li>
-          <li className="listfilm_item ">
-            <span>HD-VietSub</span>
-            <Link to="/info/tenphim-id"  >
-              <img src="https://i3.wp.com/img.phimmoichill.net/images/info/un-plan-parfait.jpg" alt="" />
-              <p>Tên phim</p>
-            </Link>
-          </li>
-          <li className="listfilm_item ">
-            <span>HD-VietSub</span>
-            <Link to="/info/tenphim-id"  >
-              <img src="https://i3.wp.com/img.phimmoichill.net/images/info/un-plan-parfait.jpg" alt="" />
-              <p>Tên phim</p>
-            </Link>
-          </li>
-          <li className="listfilm_item ">
-            <span>HD-VietSub</span>
-            <Link to="/info/tenphim-id"  >
-              <img src="https://i3.wp.com/img.phimmoichill.net/images/info/un-plan-parfait.jpg" alt="" />
-              <p>Tên phim</p>
-            </Link>
-          </li>
-          <li className="listfilm_item ">
-            <span>HD-VietSub</span>
-            <Link to="/info/tenphim-id"  >
-              <img src="https://i3.wp.com/img.phimmoichill.net/images/info/un-plan-parfait.jpg" alt="" />
-              <p>Tên phim</p>
-            </Link>
-          </li>
-          <li className="listfilm_item ">
-            <span>HD-VietSub</span>
-            <Link to="/info/tenphim-id"  >
-              <img src="https://i3.wp.com/img.phimmoichill.net/images/info/un-plan-parfait.jpg" alt="" />
-              <p>Tên phim</p>
-            </Link>
-          </li>
-          <li className="listfilm_item ">
-            <span>HD-VietSub</span>
-            <Link to="/info/tenphim-id"  >
-              <img src="https://i3.wp.com/img.phimmoichill.net/images/info/un-plan-parfait.jpg" alt="" />
-              <p>Tên phim</p>
-            </Link>
-          </li>
-          <li className="listfilm_item ">
-            <span>HD-VietSub</span>
-            <Link to="/info/tenphim-id"  >
-              <img src="https://i3.wp.com/img.phimmoichill.net/images/info/un-plan-parfait.jpg" alt="" />
-              <p>Tên phim</p>
-            </Link>
-          </li>
-
+          {films && showFilms(films)}
         </ul>
 
         {/* pagination */}
         <div className="pagination">
           <div className="pagination_wrapper">
-            <Link to="/" className="active">1</Link>
-            <Link to="/">2</Link>
-            <Link to="/">3</Link>
-            <Link to="/">4</Link>
-            <Link to="/">5</Link>
+            <button type="button "
+              onClick={() => init.pages <= 1 ? setInit({ ...init, pages: 1 }) : setInit({ ...init, pages: init.pages - 1 })}
+              disabled={init.pages === 1 ? true : false}
+            >
+              <i className="fa-solid fa-arrow-left-long"></i>
+            </button>
+            <span className="page">{init.pages}</span>
+            <button type="button"
+              onClick={() => init.pages >= totalPages ? setInit({ ...init, pages: totalPages }) : setInit({ ...init, pages: init.pages + 1 })}
+              disabled={init.pages === totalPages ? true : false}
+            >
+              <i className="fa-solid fa-arrow-right-long"></i>
+            </button>
           </div>
         </div>
       </div>

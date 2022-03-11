@@ -9,6 +9,10 @@
                 padding-right: 8px;
             }
             @include md {
+                margin-left: 0;
+                margin-right: 0;
+            }
+            @include lg {
                 margin-left: -8px;
                 margin-right: -8px;
             }

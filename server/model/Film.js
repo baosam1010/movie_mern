@@ -30,16 +30,32 @@ const FilmSchema = new Schema({
 
     url: {
         type: String,
-        required: true,
+        required: false,
     },
 
     country: {
         type: String,
         required: false,
     },
-    episode: {
-        type: [Object],
-        required: false,
+    episode: [
+        {
+            episodeName:{
+                type: String,
+                required: false,
+            },
+            episodeUrl:{
+                type: String,
+                required: false,
+            },
+            createdAt: {
+                type: Date,
+                default: Date.now(),
+            }
+        }
+    ],
+    views:{
+        type: Number,
+        default: 0,
     },
     createdAt: {
         type: Date,
@@ -47,5 +63,6 @@ const FilmSchema = new Schema({
         required: true,
     }
 });
+FilmSchema.index({category:"text", filmName:"text", actorName:"text"});
 
 module.exports = mongoose.model('films', FilmSchema)
