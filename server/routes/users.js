@@ -9,36 +9,49 @@ const mongoose = require('mongoose');
 //@desc Get ALl Users
 //@access Pravite
 router.get('/', verifyToken, async (req, res) => {
-    const { limit, search, pages } = req.query;
+    const { limit, search: key, pages } = req.query;
     console.log('getUsers', req.query)
     try {
         let conditions;
         let users;
         let count;
-
+        let regex = new RegExp(key, 'i')
         const user = await User.findById(req.userId)
         if (!user) {
             return res.status(400)
                 .json({ success: false, message: 'User not found' })
         };
-        if(search !== ""){
-            conditions = {
-                username: search
-            }
-
-            users = await User.find(conditions).sort({role: -1}).skip(parseInt(pages) - 1).limit(limit);
-            count = await User.count(conditions).countDocuments();
-            console.log(count)
-        }else{
-            users = await User.find().sort({role: -1}).skip(parseInt(pages) - 1).limit(limit)
-            count = await User.count().countDocuments();
-            console.log(count)
-
+        switch (true) {
+            case (key !== "" && key !== undefined):
+                console.log('vao 0')
+                conditions = {
+                     username: {$regex: key, $options: 'i'}
+                };
+                break;
+            case (key === ""):
+                console.log('vao 1')
+                conditions = null
+                break;
+            default: return conditions = null;
         }
+       
+        if (conditions !== null) {
+            users = await User.find(conditions).skip((parseInt(pages) - 1) * limit).limit(limit);
+            count = await User.find(conditions).countDocuments();
+            console.log(count)
+            console.log('conditions', conditions)
+            console.log('users-59:', users);
+        } else {
+            users = await User.find().skip((parseInt(pages) - 1) * limit).limit(limit)
+            count = await User.find().countDocuments();
+            console.log('no Conditions', count)
+        }
+
         const { role } = user;
 
         if (role > 0) {
-            return res.json({ success: true, message: "Get all user success!", users, totalPages: Math.ceil(count/limit) })
+
+            return res.json({ success: true, message: "Get all user success!", users, totalPages: Math.ceil(count / limit) })
         } else {
             return res.status(400).json({ success: false, message: "Bạn không có quyền truy cập" })
         }

@@ -14,7 +14,7 @@ import classnames from 'classname';
 function MovieDashBoard(props) {
     const { filmsInfo, init, setTotalPages, } = props;
     const { isLoading } = filmsInfo;
-    console.log('MovieDash:',init)
+    console.log('MovieDash:', init)
     const formGrid = useRef();
     const dispatch = useDispatch();
     const [films, setFilms] = useState();
@@ -116,11 +116,14 @@ function MovieDashBoard(props) {
         const { id, type } = movieId;
         const getFilms = async () => {
             try {
-                const films = await filmApi.getFilms({...init});
+                const films = await filmApi.getFilms({ ...init });
                 console.log('films:', films)
-                if (films.listFilm && films.listFilm.length>0) {
+                console.log('lengthFilms:',films.listFilm.length)
+                if (films.listFilm && films.listFilm.length > 0) {
                     setTotalPages(films.totalPages)
                     setFilms(films.listFilm)
+                }else{
+                    setFilms()
                 }
             } catch (error) {
                 throw error
@@ -249,7 +252,7 @@ function MovieDashBoard(props) {
                                                     ))}
                                                     <button type="button" className="add_item mb-10" onClick={() => arrayHeplers.push({ episodeUrl: "", episodeName: "" })}>Thêm tập mới</button>
                                                 </>) : (
-                                                    <button type="button" className="add_item mb-10" onClick={() => arrayHeplers.push({ episodeUrl: "", episodeName: "" })}>Thêm tập mới</button>
+                                                <button type="button" className="add_item mb-10" onClick={() => arrayHeplers.push({ episodeUrl: "", episodeName: "" })}>Thêm tập mới</button>
 
                                             )}
                                         </>
@@ -298,9 +301,11 @@ function MovieDashBoard(props) {
 
             {/* list item movie */}
             <h1 className="title_list"> Danh sách phim</h1>
-            <ul className="main_list">
+            {films && films.length>0 ?(
+                <ul className="main_list">
                 {films && showMovieItem(films)}
             </ul>
+            ):(<h2>Không tím thấy phim</h2>)}
         </>
     )
 }

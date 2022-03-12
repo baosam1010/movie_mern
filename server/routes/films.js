@@ -21,64 +21,45 @@ router.get('/', async (req, res) => {
         let films;
         let conditions;
         let sorted = {};
-        sorted[arrangement] = -1;
+        if (arrangement !== "" && arrangement !== undefined) {
+            sorted[arrangement] = 'desc';
+        }
 
         switch (true) {
             case (key === "" && category === ""):
-                console.log('vao ')
-
-                return null;
-            case (key !== "" && !category):
                 console.log('vao 1')
-                conditions = {
-                    $text: {
-                        $search: key,
-                    }
-                };
-                break;
-            case (key === "" && !category):
+                return null;
+            case (!key && !category):
                 console.log('vao 2')
                 conditions = {};
-                break;
-            case (!key && !category):
-                console.log('vao 3')
-
-                conditions = null;
-                break;
-            case (!category && key !== ""):
-                console.log('vao 4')
-                conditions = {
-                    $text: {
-                        $search: key,
-                    }
-                };
-                break;
-            case (category === "" && key !== ""):
-                console.log('vao 5')
-                conditions = {
-                    $text: { $search: key }
-                };
-                break;
-            case (category !== "" && !key):
-                conditions = {
-                    category
-                };
-                break;
-            case (category !== "" && key === ""):
-                conditions = {
-                    category
-                };
-                break;
-            case (category !== "" && key !== ""):
+                break
+            case (key !== "" && key !== undefined && category !== undefined && category !== ""):
+                console.log('vao 3');
+                console.log(category, key)
                 conditions = {
                     $text: { $search: key },
                     category,
                 };
                 break;
-            default: conditions = {};
+            case (key !== "" && key !== undefined):
+                console.log('vao 4', key)
+                conditions = {
+                    $text: { $search: key },
+                };
+                break;
+            case (category !== ""):
+                console.log('vao 5')
+                conditions = {
+                    category
+                };
+                break;
+            default: return conditions = null;
         };
+        
         if (conditions !== null) {
-            if (parseInt(pages) > 0 && limit) {
+            console.log('CDT:', conditions)
+           
+            if (parseInt(pages) > 0) {
                 skip = (parseInt(pages) - 1) * limit;
                 films = await Film.find(conditions)
                     .sort(sorted)
@@ -86,16 +67,17 @@ router.get('/', async (req, res) => {
                     .limit(limit)
                 count = await Film.countDocuments(conditions);
                 console.log('count:', count)
-
             } else {
-                count = await Film.countDocuments(conditions);
-                films = await Film.find(conditions).sort(sorted).limit(limit);
+                films = await Film.find(conditions)
+                    .sort(sorted)
+                    .limit(limit);
             }
         } else {
-            console.log('khong co condition')
             count = await Film.countDocuments();
-            films = await Film.find().sort(sorted).limit(limit);
+            films = await Film.find().limit(limit);
+            console.log('films NULL:', films)
         }
+
 
         if (!films) {
             return res.status(400)

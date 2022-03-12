@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Field, Form, Formik } from 'formik';
 import classnames from 'classname';
-import { useResolvedPath, useMatch, Link, Routes, Route, useParams, useLocaltion, useLocation, } from 'react-router-dom';
+import { useResolvedPath, useMatch, Link, Routes, Route, useLocation, } from 'react-router-dom';
 import MovieDashBoard from '../../components/dashboard/MovieDashBoard';
 import UserDashBoard from '../../components/dashboard/UserDashBoard';
 
@@ -11,11 +11,11 @@ import UserDashBoard from '../../components/dashboard/UserDashBoard';
 function DashBoard() {
   const [init, setInit] = useState({
     pages: 1,
-    limit: 4,
+    limit: 10,
     search: ""
   });
   const [totalPages, setTotalPages] = useState()
-  const {pathname} = useLocation();
+  const { pathname } = useLocation();
   console.log('params:', pathname)
 
   function CustomLink(linkProps) {
@@ -35,24 +35,33 @@ function DashBoard() {
       </li>
     );
   };
-
   useEffect(() => {
     setInit({
-      pages: 1,
-      limit: 4,
-      search: ""
+      ...init,
+      search:"",
+      pages:1
     })
-    if(init.search !==""){
+    
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[pathname]);
+
+  useEffect(() => {
+    if (init.search !== "") {
       setInit({
         ...init,
-        pages: 1, 
+        pages: 1,
       })
     }
+    return () => {
+      setInit({
+        pages: 1,
+        limit: 10,
+        search: ""
+      })
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [init.search]);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pathname, init.search]);
-
-  console.log('dash:',init, totalPages)
 
   return (
     <div className='dashboard'>
@@ -76,7 +85,7 @@ function DashBoard() {
             initialValues={{ search: '', }}
             onSubmit={(values, actions) => {
               console.log(values);
-              setInit({...init, search: values.search, pages: 1});
+              setInit({ ...init, search: values.search, pages: 1 });
               actions.resetForm();
             }}
           >
@@ -90,13 +99,13 @@ function DashBoard() {
 
           {/* Route children */}
           <Routes>
-            <Route 
+            <Route
               index
               element={<MovieDashBoard
                 init={init}
-                setInit={setInit}
+                setInit={(data) => setInit(data)}
                 totalPages={totalPages}
-                setTotalPages={(num)=>setTotalPages(num)}
+                setTotalPages={(num) => setTotalPages(num)}
 
               />}
 
@@ -105,9 +114,9 @@ function DashBoard() {
               path="users"
               element={<UserDashBoard
                 init={init}
-                setInit={setInit}
+                setInit={(data) => setInit(data)}
                 totalPages={totalPages}
-                setTotalPages={(num)=>setTotalPages(num)}
+                setTotalPages={(num) => setTotalPages(num)}
               />}
 
             />

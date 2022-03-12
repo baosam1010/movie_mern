@@ -2049,7 +2049,7 @@ input {
 }
 
 .dashboard_main .main_wrapper .form_create_btn button:hover {
-  background-color: #ccc;
+  opacity: 0.8;
 }
 
 .dashboard_main .main_wrapper .form_create_btn button:last-child {
@@ -2361,16 +2361,9 @@ input {
   padding: 10px 20px;
   font-size: 16px;
   border-radius: 9999px;
-  width: 100%;
   /* Firefox */
   /* Safari and Chrome */
   appearance: none;
-}
-
-@media screen and (min-width: 960px) {
-  .dashboard_user_form .field_wrapper select {
-    grid-template-columns: span 1;
-  }
 }
 
 .dashboard_user_form .field_wrapper .field_message {
@@ -2380,25 +2373,71 @@ input {
   padding-left: 20px;
 }
 
-.dashboard_user_form div:first-child {
+.dashboard_user_form .field_wrapper:first-child {
   grid-column-start: span 2;
 }
 
 @media screen and (min-width: 960px) {
-  .dashboard_user_form div:first-child {
+  .dashboard_user_form .field_wrapper:first-child {
     grid-column-start: span 3;
   }
 }
 
-.dashboard_user_form button {
-  border: 1px solid gray;
+.dashboard_user_form .field_wrapper + .field_wrapper {
+  grid-column-start: span 2;
+}
+
+@media screen and (min-width: 960px) {
+  .dashboard_user_form .field_wrapper + .field_wrapper {
+    grid-column-start: span 1;
+  }
+}
+
+.dashboard_user_form .btn_group {
+  display: grid;
+  grid-gap: 20px;
+  grid-column-start: span 2;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+@media screen and (min-width: 960px) {
+  .dashboard_user_form .btn_group {
+    grid-column-start: span 4;
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.dashboard_user_form .btn_group button {
   padding: 10px 20px;
   font-size: 16px;
   font-weight: 500;
-  border-radius: 9999px;
+  border-radius: 8px;
+  grid-column-start: span 1;
+  color: #ffffff;
 }
 
-.dashboard_user_form button:hover {
-  background-color: rgba(0, 0, 0, 0.5);
+.dashboard_user_form .btn_group button:hover {
+  opacity: 0.6;
+}
+
+.dashboard_user_form .btn_group button:first-child {
+  background-color: green;
+  background-image: linear-gradient(to bottom right, #8940e9, #c240e9);
+}
+
+@media screen and (min-width: 960px) {
+  .dashboard_user_form .btn_group button:first-child {
+    grid-column-start: 2;
+  }
+}
+
+.dashboard_user_form .btn_group button:last-child {
+  background-color: red;
+}
+
+@media screen and (min-width: 960px) {
+  .dashboard_user_form .btn_group button:last-child {
+    grid-column-start: 3;
+  }
 }
 /*# sourceMappingURL=app.css.map */

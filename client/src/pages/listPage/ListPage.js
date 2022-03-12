@@ -3,8 +3,8 @@ import React, { useEffect, useState } from 'react';
 import {
   Link,
   useNavigate,
-  // useLocation, 
-  useParams, useSearchParams
+  useParams, 
+  useSearchParams
 } from 'react-router-dom';
 import { Field, Form, Formik } from 'formik';
 import filmApi from '../../apis/filmApi';
@@ -41,7 +41,12 @@ function ListPage() {
 
   useEffect(() => {
     if (slug && title.hasOwnProperty(slug)) {
-      setInit({ ...init, category: slug, search: "" })
+      if (slug !== init.category) {
+        setInit({ ...init, category: slug, search: "", pages: 1 })
+
+      } else {
+        setInit({ ...init, category: slug, search: "" })
+      }
     }
     else if (searchParams) {
       let search = searchParams.get('search');
@@ -71,7 +76,8 @@ function ListPage() {
         limit: 4,
       })
     };
-  }, [slug,
+  }, [
+    slug,
     init.arrangement,
     init.search,
     init.pages,
@@ -80,6 +86,7 @@ function ListPage() {
     searchParams.get('arrangement'),
     searchParams.get('category')
   ]);
+
 
   const showFilms = (films) => {
     let html = null;
@@ -101,7 +108,6 @@ function ListPage() {
   };
 
 
-  console.log(init)
   return (
     <div className="listfilm">
       <div className="container">

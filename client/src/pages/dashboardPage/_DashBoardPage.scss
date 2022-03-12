@@ -178,7 +178,7 @@
                         color: white;
                         @include bkgimg;
                         &:hover {
-                            background-color: #ccc;
+                            opacity: 0.8;
                         }
                         &:last-child {
                             margin-left: 10px;

@@ -37,10 +37,6 @@
                 padding: 10px 20px;
                 font-size: 16px;
                 border-radius: 9999px;
-                width: 100%;
-                @include md {
-                    grid-template-columns: span 1;
-                }
 
                 -moz-appearance: none; /* Firefox */
                 -webkit-appearance: none; /* Safari and Chrome */
@@ -53,22 +49,53 @@
                 padding-left: 20px;
             }
         }
-        div:first-child {
+        .field_wrapper:first-child {
             grid-column-start: span 2;
-
             @include md {
                 grid-column-start: span 3;
             }
         }
-        button {
-            border: 1px solid gray;
-            padding: 10px 20px;
-            font-size: 16px;
-            font-weight: 500;
-            border-radius: 9999px;
+        .field_wrapper + .field_wrapper {
+            grid-column-start: span 2;
+            @include md {
+                grid-column-start: span 1;
+            }
+        }
+        .btn_group {
+            display: grid;
+            grid-gap: 20px;
+            grid-column-start: span 2;
+            grid-template-columns: repeat(2, 1fr);
 
-            &:hover {
-                background-color: rgba(0, 0, 0, 0.5);
+            @include md {
+                grid-column-start: span 4;
+                grid-template-columns: repeat(4, 1fr);
+            }
+            button {
+                padding: 10px 20px;
+                font-size: 16px;
+                font-weight: 500;
+                border-radius: 8px;
+                grid-column-start: span 1;
+                color: $white;
+                &:hover {
+                    opacity: 0.6;
+                }
+            }
+            button:first-child {
+                background-color: green;
+                @include bkgimg;
+                @include md {
+                    grid-column-start: 2;
+                }
+                
+            }
+            button:last-child {
+                background-color: red;            
+                @include md {
+                    grid-column-start: 3;
+                }
+                
             }
         }
     }
