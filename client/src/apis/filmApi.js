@@ -1,3 +1,4 @@
+import { LocalStorage_TokenName } from '../constants/actionsType';
 import axiosClient from './axiosClient';
 
 
@@ -13,7 +14,10 @@ const filmApi = {
     getFilms: (params)=>{
         const url = '/films';
         return axiosClient.get(url,{            
-            params
+            params,
+            headers: {
+                Authorization: 'Bearer '+ localStorage[LocalStorage_TokenName],
+            }
         });
     },
     getOne: (id)=>{

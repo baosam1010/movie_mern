@@ -44,7 +44,7 @@ router.post('/register', async (req, res) => {
         if (user) {
             return res.status(400).
                 json({
-                    sucess: false, message: 'Username has been user'
+                    sucess: false, message: 'Username has been used'
                 })
         }
 
@@ -74,9 +74,8 @@ router.post('/register', async (req, res) => {
 //@route Post api/auth/login
 //des Login user
 //@access Public
-
 router.post('/login', async (req, res) => {
-    const { username, password } = req.body;
+    const { username, password, } = req.body;
 
     //simple validation login
     if (!username || !password) {
@@ -94,7 +93,6 @@ router.post('/login', async (req, res) => {
                 .json({ success: false, message: 'Incorrect username or password' })
 
         };
-
         // username found in database, check password
         const passwordValid = await argon2.verify(user.password, password);
 

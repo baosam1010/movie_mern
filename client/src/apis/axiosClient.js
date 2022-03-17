@@ -18,13 +18,10 @@ axiosClient.interceptors.request.use(async (config) => {
 
     if (config.headers.Authorization) {
         axiosClient.defaults.headers.common['Authorization'] = config.headers.Authorization;
-        
-
-
     } else {
-        delete axiosClient.defaults.headers.common['Authorization']
-        
+        delete axiosClient.defaults.headers.common['Authorization']    
     }
+    
     // console.log('config:',config.headers)
 
 

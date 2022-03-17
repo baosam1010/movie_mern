@@ -3,6 +3,8 @@ import React, { useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import classnames from 'classname';
 import { LoadUser } from '../../actions/Actions';
+import firebase from 'firebase/compat/app';
+
 
 
 function HeaderTop(props) {
@@ -27,6 +29,7 @@ function HeaderTop(props) {
 
     const handleLogOut = () => {
         dispatch(LoadUser(null));
+        firebase.auth().signOut()
         negative('/')
     };
 

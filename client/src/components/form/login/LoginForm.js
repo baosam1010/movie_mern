@@ -5,6 +5,24 @@ import * as Yup from 'yup';
 import { useDispatch, connect } from 'react-redux';
 import { Login } from '../../../actions/Actions';
 
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/auth';
+import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
+
+
+// Configure FirebaseUI.
+const uiConfig = {
+    // Popup signin flow rather than redirect flow.
+    signInFlow: 'popup',
+    // Redirect to /signedIn after sign in is successful. Alternatively you can provide a callbacks.signInSuccess function.
+    signInSuccessUrl: '/',
+    // We will display Google and Facebook as auth providers.
+    signInOptions: [
+        firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+    ],
+};
+
+
 const SignupSchema = Yup.object().shape({
     username: Yup.string()
         .min(6, 'Bạn cần nhập ít nhất 6 kí tự!')
@@ -31,19 +49,19 @@ function LoginForm(props) {
     useEffect(() => {
         const getLogin = async () => {
             try {
-
                 if (formLogin.username !== "" && formLogin.password !== "") {
                     dispatch(Login(formLogin))
                 }
 
             } catch (error) {
-                    throw error
+                throw error
             }
         }
         getLogin();
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [formLogin]);
+
     useEffect(() => {
         if (userAuthenticated) {
             navigated('/info/tenfilm-id', { replace: true })
@@ -82,6 +100,8 @@ function LoginForm(props) {
                             placeholder="Nhập mật khẩu của bạn"
                         />
                         {message ? (<div>{message}</div>) : (props.errors.password && <div className="error">{props.errors.password}</div>)}
+                        <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={firebase.auth()} />
+
                         <div className="login_wrapper">
                             <button type="submit" className="login_btn btn_login">Đăng Nhập</button>
                             <Link to="/" className="login_btn btn_cancel">Hủy</Link>
@@ -90,6 +110,7 @@ function LoginForm(props) {
                     </form>
                 )}
             </Formik>
+
         </div>
     )
 }

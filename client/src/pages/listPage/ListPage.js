@@ -25,7 +25,7 @@ function ListPage() {
       category: '',
       search: '',
       pages: 1,
-      limit: 4,
+      limit: 12,
     }
   )
   let { slug } = params;
@@ -73,7 +73,7 @@ function ListPage() {
         category: '',
         search: '',
         pages: 1,
-        limit: 4,
+        limit: 12,
       })
     };
   }, [

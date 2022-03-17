@@ -14,7 +14,6 @@ import classnames from 'classname';
 function MovieDashBoard(props) {
     const { filmsInfo, init, setTotalPages, } = props;
     const { isLoading } = filmsInfo;
-    console.log('MovieDash:', init)
     const formGrid = useRef();
     const dispatch = useDispatch();
     const [films, setFilms] = useState();
@@ -34,7 +33,7 @@ function MovieDashBoard(props) {
         description: "",
         episode: [{
             episodeName: "",
-            episodeUrl: ""
+            episodeUrl: "",
         }],
     };
 
@@ -46,7 +45,7 @@ function MovieDashBoard(props) {
             params: {},
             message: message,
             test: function (value) {
-                console.log('value this:', this);
+                // console.log('value this:', this);
                 return value
             }
         })
@@ -74,16 +73,8 @@ function MovieDashBoard(props) {
         description: Yup.string(),
         episode: Yup.array().of(
             Yup.object().shape({
-                episodeName: Yup.string()
-                    .when(
-                        '$category',
-                        {
-                            is: () => Yup.ref('category') === 'phimbo',
-                            then: (filmSchema) => filmSchema.required(' test 1111 2222'),
-                            otherwise: (filmSchema) => filmSchema.trim(),
-                        }
-                    ),
-                episodeUrl: Yup.string()
+                episodeName: Yup.string(),                    
+                episodeUrl: Yup.string(),
                 // .when(
                 //     '$category',
                 //     (category) => {
@@ -117,8 +108,8 @@ function MovieDashBoard(props) {
         const getFilms = async () => {
             try {
                 const films = await filmApi.getFilms({ ...init });
-                console.log('films:', films)
-                console.log('lengthFilms:',films.listFilm.length)
+                // console.log('films:', films)
+                // console.log('lengthFilms:',films.listFilm.length)
                 if (films.listFilm && films.listFilm.length > 0) {
                     setTotalPages(films.totalPages)
                     setFilms(films.listFilm)
@@ -200,13 +191,13 @@ function MovieDashBoard(props) {
                 enableReinitialize={true}
                 validationSchema={filmSchema}
                 onSubmit={(values, actions) => {
-                    console.log(values);
+                    // console.log(values);
                     if (movieId.type === "update") {
                         values.updateAt = Date.now();
                         dispatch(UpdateFilm(values))
                         setMovieId({ ...movieId, id: "", movieId: "" });
                     } else {
-                        console.log(values)
+                        // console.log(values)
                         dispatch(AddFilm(values));
                     }
                     handleShowForm(false)
@@ -241,11 +232,11 @@ function MovieDashBoard(props) {
                                             {(propsFormik.values.episode && propsFormik.values.episode.length > 0) ? (
                                                 <>
                                                     {propsFormik.values.episode.map((item, index) => (
-                                                        <div key={index + item.episodeUrl} className="episode mb-10">
-                                                            <Field key={"episodeName" + index} className="form_item" name={`episode[${index}].episodeName`} placeholder="Tên tập phim" />
+                                                        <div key={index} className="episode mb-10">
+                                                            <Field type="text" key={"episodeName" + index} className="form_item" name={`episode[${index}].episodeName`} placeholder="Tên tập phim..." />
                                                             <ErrorMessage name={`episode[${index}].episodeName`} />
 
-                                                            <Field key={'episodeUrl' + index} className="form_item mt-10" name={`episode[${index}].episodeUrl`} placeholder="Link tập phim..." />
+                                                            <Field type="text" key={"episodeUrl" + index} className="form_item mt-10" name={`episode[${index}].episodeUrl`} placeholder="Link tập phim..." />
                                                             <ErrorMessage name={`episode[${index}].episodeUrl`} />
                                                             <button type="button" className="delete_item mb-10" onClick={() => arrayHeplers.remove(index)}>Xóa {item.episodeName}</button>
                                                         </div>

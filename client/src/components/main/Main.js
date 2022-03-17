@@ -12,7 +12,6 @@ function Main(props) {
                 <BlockMovie title="Phim mới cập nhật" sublink="phimle" />
                 <BlockMovie title="Phim bộ" sublink="phimbo" />
                 <BlockMovie title="Phim hành động"  sublink="phimhanhdong"/>
-                <BlockMovie title="Phim chiếu rạp"  sublink="phimchieurap"/>
                 <BlockMovie title="Phim tình cảm" sublink="phimtinhcam" />
                 <BlockMovie title="Phim viễn tưởng" sublink="phimvientuong"/>    
             </div>

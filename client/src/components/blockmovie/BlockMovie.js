@@ -13,7 +13,7 @@ function BlockMovie(props) {
                 const params = {
                     category: sublink,
                     arrangement: 'createdAt',
-                    limit: 12,
+                    limit: 15,
                 }
                 const resp = await filmApi.getFilms(params);
                 setFilms(resp.listFilm)
@@ -51,36 +51,8 @@ function BlockMovie(props) {
             </div>
 
             <ul className="list">
-                {films && showFilms(films)}
-
-                <li className="item ">
-                    <span>HD-VietSub</span>
-                    <Link to={`info/tenphim-id`}  >
-                        <img src="https://i3.wp.com/img.phimmoichill.net/images/info/un-plan-parfait.jpg" alt="" />
-                        <p>Tên phim</p>
-                    </Link>
-                </li>
-                <li className="item ">
-                    <span>HD-VietSub</span>
-                    <Link to={`info/tenphim-id`}  >
-                        <img src="https://i3.wp.com/img.phimmoichill.net/images/info/un-plan-parfait.jpg" alt="" />
-                        <p>Tên phim</p>
-                    </Link>
-                </li>
-                <li className="item ">
-                    <span>HD-VietSub</span>
-                    <Link to={`info/tenphim-id`}  >
-                        <img src="https://i3.wp.com/img.phimmoichill.net/images/info/un-plan-parfait.jpg" alt="" />
-                        <p>Tên phim</p>
-                    </Link>
-                </li>
-                <li className="item ">
-                    <span>HD-VietSub</span>
-                    <Link to={`info/tenphim-id`}  >
-                        <img src="https://i3.wp.com/img.phimmoichill.net/images/info/un-plan-parfait.jpg" alt="" />
-                        <p>Tên phim</p>
-                    </Link>
-                </li>
+                {films && showFilms(films)}               
+                
             </ul>
         </div>
     )

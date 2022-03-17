@@ -109,6 +109,10 @@ router.delete('/:id', verifyToken, async function (req, res) {
     }
 
 });
+
+//@route PUT /users/:id
+//@desc Update information of user by id
+//@access Pravite
 router.put('/:id', verifyToken, async (req, res) => {
     const { username, password, createdAt, role, _v } = req.body;
     console.log(req.params.id);
