@@ -4,7 +4,7 @@ import queryString from 'query-string';
 
 let axiosClient = axios.create(
     {
-        baseURL: process.env.REACT_APP_API_URL,
+        baseURL: process.env.NODE_ENV !== 'production'? process.env.REACT_APP_API_URL : "https://gentle-stream-80499.herokuapp.com/api",
         headers: {
             'Content-Type': 'application/json',
         },
