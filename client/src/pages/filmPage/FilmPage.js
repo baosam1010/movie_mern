@@ -6,7 +6,7 @@ import filmApi from '../../apis/filmApi';
 import io from 'socket.io-client';
 import classnames from 'classname';
 
-let socket = io('localhost:5000');
+let socket = io('https://gentle-stream-80499.herokuapp.com');
 
 
 function FilmPage({ info }) {
